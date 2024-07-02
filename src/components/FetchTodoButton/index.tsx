@@ -1,22 +1,31 @@
 'use client';
 
-import { useState } from "react";
-import { generateClient } from "aws-amplify/api";
+import React, { useState } from "react";
 import { listTodos } from "@/graphql/queries";
+import { client } from '@/amplify-config';
+import { ListTodosQuery, Todo } from '@/API';  // Make sure to import Todo type
+import { GraphQLResult } from '@aws-amplify/api';
 
-const client = generateClient();
+function isGraphQLResult(result: any): result is GraphQLResult<ListTodosQuery> {
+  return 'data' in result;
+}
 
-const FetchTodoButton = () => {
-  const [todos, setTodos] = useState<any[]>([]);
+const FetchTodoButton: React.FC = () => {
+  const [todos, setTodos] = useState<(Todo | null)[]>([]);
 
   const fetchTodos = async () => {
     try {
-      const response = await client.graphql({
+      const result = await client.graphql({
         query: listTodos
       });
-      const fetchedTodos = response.data.listTodos?.items || [];
-      setTodos(fetchedTodos);
-      console.log('All todos:', fetchedTodos);
+
+      if (isGraphQLResult(result)) {
+        const fetchedTodos = result.data.listTodos?.items || [];
+        setTodos(fetchedTodos);
+        console.log('All todos:', fetchedTodos);
+      } else {
+        console.error('Unexpected result type');
+      }
     } catch (error) {
       console.error('Error fetching todos:', error);
     }
@@ -34,8 +43,10 @@ const FetchTodoButton = () => {
         <div className="mt-8">
           <h2 className="text-2xl font-bold text-white mb-4">Fetched Todos:</h2>
           <ul className="text-white">
-            {todos.map((todo) => (
-              <li key={todo.id}>{todo.name}</li>
+            {todos.map((todo, index) => (
+              <li key={todo?.id || index}>
+                {todo?.name || 'Unnamed Todo'}
+              </li>
             ))}
           </ul>
         </div>
