@@ -1,27 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
-import { listTodos, getTodo } from "@/graphql/queries";
-import { createTodo, updateTodo, deleteTodo } from "@/graphql/mutations";
-import { generateClient } from "aws-amplify/api";
-
-
-const fetchTodos = async () => {
-  try {
-    const response = await client.graphql({
-      query: listTodos
-    });
-    const fetchedTodos = response.data.listTodos?.items || [];
-    console.log('All todos:', fetchedTodos);
-  } catch (error) {
-    console.error('Error fetching todos:', error);
-  }
-};
-
-
-
-
-const client = generateClient();
+import FetchTodoButton from "@/components/FetchTodoButton";
 
 
 const Hero = () => {
@@ -41,14 +20,11 @@ const Hero = () => {
                 <h1 className="mb-6 text-3xl font-bold leading-snug text-white sm:text-4xl sm:leading-snug lg:text-5xl lg:leading-[1.2]">
                   Todo List
                 </h1>
-                <button onClick={fetchTodos} >
-                  Click here
-                </button>
+                <FetchTodoButton />
                 <p className="mx-auto mb-9 max-w-[600px] text-base font-medium text-white sm:text-lg sm:leading-[1.44]">
-                  Next.js SaaS Boilerplate and Starter Kit designed and built
-                  for SaaS startups. It comes with all necessary integrations,
-                  pages, and components you need to launch a feature-rich SaaS
-                  websites.
+                Abloomify is an innovative company focused on revolutionizing productivity analysis for SaaS businesses
+                 using advanced artificial intelligence technologies. Leveraging state-of-the-art AI algorithms,
+                  Abloomify provides comprehensive insights into user behavior, workflow efficiencies, and system performance.
                 </p>
                 <ul className="mb-10 flex flex-wrap items-center justify-center gap-5">
                   <li>
