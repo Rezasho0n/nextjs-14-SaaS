@@ -1,15 +1,16 @@
 "use client";
-import { signOut, useSession } from "next-auth/react";
 import { useTheme } from "next-themes";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter  } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useAuth } from '@/contexts/AuthContext';
 
 import menuData from "./menuData";
 
 const Header = () => {
-  const { data: session } = useSession();
+  const { user, signOut } = useAuth();
+  const router = useRouter();
 
   const pathUrl = usePathname();
   // Navbar toggle
@@ -38,6 +39,15 @@ const Header = () => {
       setOpenIndex(-1);
     } else {
       setOpenIndex(index);
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      router.push('/signin');
+    } catch (error) {
+      console.error("Error signing out:", error);
     }
   };
 
@@ -286,25 +296,25 @@ const Header = () => {
                   </span>
                 </button>
 
-                {session?.user ? (
+                {user.username ? (
                   <>
                     <p
                       className={`loginBtn px-7 py-3 text-base font-medium ${
                         !sticky && pathUrl === "/" ? "text-white" : "text-dark"
                       }`}
                     >
-                      {session?.user?.name}
-                    </p>
+                  {user.username}
+                  </p>
                     {pathUrl !== "/" || sticky ? (
                       <button
-                        onClick={() => signOut()}
+                        onClick={() => handleSignOut()}
                         className="signUpBtn rounded-lg bg-primary bg-opacity-100 px-6 py-3 text-base font-medium text-white duration-300 ease-in-out hover:bg-opacity-20 hover:text-dark"
                       >
                         Sign Out
                       </button>
                     ) : (
                       <button
-                        onClick={() => signOut()}
+                        onClick={() => handleSignOut()}
                         className="signUpBtn rounded-lg bg-white bg-opacity-20 px-6 py-3 text-base font-medium text-white duration-300 ease-in-out hover:bg-opacity-100 hover:text-dark"
                       >
                         Sign Out
