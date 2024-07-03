@@ -10,6 +10,14 @@
       "StackName": "amplify-nextjs14saasv1-dev-fa9aa",
       "StackId": "arn:aws:cloudformation:us-east-1:718741307500:stack/amplify-nextjs14saasv1-dev-fa9aa/47e24800-3891-11ef-8a5e-0e9bd4ed2315",
       "AmplifyAppId": "desz239yuyflp"
+    },
+    "categories": {
+      "auth": {
+        "nextjs14saasv125a599a1": {}
+      },
+      "api": {
+        "nextjs14saasv1": {}
+      }
     }
   }
 }

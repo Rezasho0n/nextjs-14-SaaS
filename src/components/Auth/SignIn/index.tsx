@@ -1,5 +1,4 @@
 "use client";
-import { signIn } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -10,42 +9,34 @@ import SwitchOption from "../SwitchOption";
 import MagicLink from "../MagicLink";
 import Loader from "@/components/Common/Loader";
 
+import { useAuth } from '@/contexts/AuthContext';
+
 const Signin = () => {
   const router = useRouter();
+  const { signIn } = useAuth();
 
   const [loginData, setLoginData] = useState({
     email: "",
     password: "",
-    checkboxToggle: false,
   });
 
   const [isPassword, setIsPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const loginUser = (e: any) => {
+  const loginUser = async (e: React.FormEvent) => {
     e.preventDefault();
-
     setLoading(true);
-    signIn("credentials", { ...loginData, redirect: false })
-      .then((callback) => {
-        if (callback?.error) {
-          toast.error(callback?.error);
-          console.log(callback?.error);
-          setLoading(false);
-          return;
-        }
 
-        if (callback?.ok && !callback?.error) {
-          toast.success("Login successful");
-          setLoading(false);
-          router.push("/");
-        }
-      })
-      .catch((err) => {
-        setLoading(false);
-        console.log(err.message);
-        toast.error(err.message);
-      });
+    try {
+      await signIn(loginData.email, loginData.password);
+      toast.success("Login successful");
+      router.push("/");
+    } catch (error) {
+      console.error('Error signing in:', error);
+      toast.error(error instanceof Error ? error.message : "Failed to sign in");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -91,7 +82,7 @@ const Signin = () => {
               />
 
               {isPassword ? (
-                <form onSubmit={(e) => e.preventDefault()}>
+                <form onSubmit={loginUser}>
                   <div className="mb-[22px]">
                     <input
                       type="email"

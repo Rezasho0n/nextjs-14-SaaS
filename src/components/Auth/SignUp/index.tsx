@@ -8,39 +8,35 @@ import SwitchOption from "../SwitchOption";
 import { useState } from "react";
 import MagicLink from "../MagicLink";
 import Loader from "@/components/Common/Loader";
+import { useAuth } from '@/contexts/AuthContext';
+
 
 const SignUp = () => {
   const router = useRouter();
   const [isPassword, setIsPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { signUp } = useAuth();
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     setLoading(true);
-    const data = new FormData(e.currentTarget);
-    const value = Object.fromEntries(data.entries());
-    const finalData = { ...value };
 
-    fetch("/api/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(finalData),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        toast.success("Successfully registered");
-        setLoading(false);
-        router.push("/signin");
-      })
-      .catch((err) => {
-        toast.error(err.message);
-        setLoading(false);
-      });
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const name = formData.get('name') as string;
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
+
+    try {
+      await signUp(name, password, email);
+      toast.success("Successfully registered");
+      router.push("/signin");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Failed to sign up");
+    } finally {
+      setLoading(false);
+    }
   };
-
   return (
     <section className="bg-[#F4F7FF] py-14 dark:bg-dark lg:py-[90px]">
       <div className="container">

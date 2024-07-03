@@ -10,6 +10,8 @@ import "../styles/prism-vsc-dark-plus.css";
 import ToasterContext from "./api/contex/ToasetContex";
 import { useEffect, useState } from "react";
 import PreLoader from "@/components/Common/PreLoader";
+import { AuthProvider } from '@/contexts/AuthContext';
+import '../amplify-config';
 
 export default function RootLayout({
   children,
@@ -24,29 +26,26 @@ export default function RootLayout({
 
   return (
     <html suppressHydrationWarning={true} className="!scroll-smooth" lang="en">
-      {/*
-        <head /> will contain the components returned by the nearest parent
-        head.js. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
-      */}
       <head />
-
       <body>
         {loading ? (
           <PreLoader />
         ) : (
-          <SessionProvider>
-            <ThemeProvider
-              attribute="class"
-              enableSystem={false}
-              defaultTheme="light"
-            >
-              <ToasterContext />
-              <Header />
-              {children}
-              <Footer />
-              <ScrollToTop />
-            </ThemeProvider>
-          </SessionProvider>
+          <AuthProvider>
+            <SessionProvider>
+              <ThemeProvider
+                attribute="class"
+                enableSystem={false}
+                defaultTheme="light"
+              >
+                <ToasterContext />
+                <Header />
+                {children}
+                <Footer />
+                <ScrollToTop />
+              </ThemeProvider>
+            </SessionProvider>
+          </AuthProvider>
         )}
       </body>
     </html>
