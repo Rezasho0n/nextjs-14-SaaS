@@ -1,10 +1,10 @@
 import Image from "next/image";
 import FetchTodoButton from "@/components/FetchTodoButton";
 
-const About = () => {
+const MyData = () => {
   return (
     <section
-      id="about"
+      id="mydata"
       className="bg-gray-1 pb-8 pt-20 dark:bg-dark-2 lg:pb-[70px] lg:pt-[120px]"
     >
       <div className="container">
@@ -177,4 +177,4 @@ const About = () => {
   );
 };
 
-export default About;
+export default MyData;
