@@ -1,5 +1,6 @@
 import Image from "next/image";
 import FetchTodoButton from "@/components/FetchTodoButton";
+import AddTodoForm from "@/components/AddTodoForm";
 
 const MyData = () => {
   return (
@@ -12,9 +13,7 @@ const MyData = () => {
           <div className="-mx-4 flex flex-wrap items-center">
             <div className="w-full px-4 lg:w-1/2">
               <div className="mb-12 max-w-[540px] lg:mb-0">
-                <h2 className="mb-6 text-3xl font-bold leading-snug text-white sm:text-4xl sm:leading-snug lg:text-5xl lg:leading-[1.2]">
-                  Your data is here!
-                </h2>
+
                 <FetchTodoButton />
               </div>
             </div>
@@ -25,12 +24,7 @@ const MyData = () => {
                   <div
                     className={`relative mb-4 sm:mb-8 sm:h-[400px] md:h-[540px] lg:h-[400px] xl:h-[500px] `}
                   >
-                    <Image
-                      src="/images/about/about-image-01.jpg"
-                      alt="about image"
-                      fill
-                      className="h-full w-full object-cover object-center"
-                    />
+                    <AddTodoForm />
                   </div>
                 </div>
 
@@ -47,10 +41,10 @@ const MyData = () => {
                   <div className="relative z-10 mb-4 flex items-center justify-center overflow-hidden bg-primary px-6 py-12 sm:mb-8 sm:h-[160px] sm:p-5 lg:mb-4 xl:mb-8">
                     <div>
                       <span className="block text-5xl font-extrabold text-white">
-                        09
+                      We have
                       </span>
                       <span className="block text-base font-semibold text-white">
-                        We have
+                        09
                       </span>
                       <span className="block text-base font-medium text-white text-opacity-70">
                         Years of experience
