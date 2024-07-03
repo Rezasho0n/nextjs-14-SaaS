@@ -9,8 +9,8 @@ const menuData: Menu[] = [
   },
   {
     id: 2,
-    title: "About",
-    path: "/about",
+    title: "My Data",
+    path: "/mydata",
     newTab: false,
   },
   {

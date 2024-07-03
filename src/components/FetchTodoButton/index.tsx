@@ -37,11 +37,11 @@ const FetchTodoButton: React.FC = () => {
         onClick={fetchTodos}
         className="mb-6 inline-block rounded-md bg-blue-500 px-8 py-3 text-base font-semibold text-white transition duration-300 ease-in-out hover:bg-blue-600 hover:shadow-lg"
       >
-        Fetch Todos
+        Fetch My Data
       </button>
       {todos.length > 0 && (
         <div className="mt-8">
-          <h2 className="text-2xl font-bold mb-4">Fetched Todos table:</h2>
+          <h2 className="text-2xl font-bold mb-4">Your Data:</h2>
           <div className="overflow-x-auto">
             <table className="min-w-full bg-white border border-gray-300">
               <thead>
