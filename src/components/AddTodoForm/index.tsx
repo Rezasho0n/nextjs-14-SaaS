@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import { generateClient } from 'aws-amplify/api';
 import { createTodo } from '@/graphql/mutations';
 import { CreateTodoInput } from '@/API';
+import { useAuth } from '@/contexts/AuthContext';
+
 
 const client = generateClient();
 
@@ -14,11 +16,20 @@ interface AddTodoFormProps {
 const AddTodoForm: React.FC<AddTodoFormProps> = ({ onTodoAdded }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
+  const { user } = useAuth();
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const input: CreateTodoInput = { name, description };
+
+      if (!user) {
+        console.error('User not authenticated');
+        return;
+      }
+      const input: CreateTodoInput = { name, description,
+        owner: user.username // Add the owner field
+       };
       const result = await client.graphql({
         query: createTodo,
         variables: { input }
@@ -60,6 +71,7 @@ const AddTodoForm: React.FC<AddTodoFormProps> = ({ onTodoAdded }) => {
       </div>
       <button
         type="submit"
+        disabled={!user}
         className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
       >
         Add Todo

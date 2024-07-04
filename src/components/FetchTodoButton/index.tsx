@@ -5,6 +5,7 @@ import { listTodos } from "@/graphql/queries";
 import { client } from '@/amplify-config';
 import { ListTodosQuery, Todo } from '@/API';
 import { GraphQLResult } from '@aws-amplify/api';
+import { useAuth } from '@/contexts/AuthContext';
 
 function isGraphQLResult(result: any): result is GraphQLResult<ListTodosQuery> {
   return 'data' in result;
@@ -12,11 +13,20 @@ function isGraphQLResult(result: any): result is GraphQLResult<ListTodosQuery> {
 
 const FetchTodoButton: React.FC = () => {
   const [todos, setTodos] = useState<(Todo | null)[]>([]);
+  const { user } = useAuth();
 
   const fetchTodos = async () => {
     try {
+      if (!user) {
+        throw new Error('User not authenticated');
+      }
       const result = await client.graphql({
-        query: listTodos
+        query: listTodos,
+        variables: {
+          filter: {
+            owner: { eq: user.username }
+          }
+        }
       });
 
       if (isGraphQLResult(result)) {
@@ -35,6 +45,7 @@ const FetchTodoButton: React.FC = () => {
     <div className="p-4">
       <button 
         onClick={fetchTodos}
+        disabled={!user}
         className="mb-6 inline-block rounded-md bg-blue-500 px-8 py-3 text-base font-semibold text-white transition duration-300 ease-in-out hover:bg-blue-600 hover:shadow-lg"
       >
         Fetch My Data
